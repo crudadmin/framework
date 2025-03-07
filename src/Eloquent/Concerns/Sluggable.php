@@ -256,7 +256,7 @@ trait Sluggable
             return;
         }
 
-        return is_array($slugs) ? $slugs[0] : null;
+        return is_array($slugs) ? ($slugs[0] ?? null) : null;
     }
 
     /**
