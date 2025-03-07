@@ -6,6 +6,7 @@ use Route;
 use Localization;
 use Admin\Models\SluggableHistory;
 use Admin\Exceptions\SluggableException;
+use Str;
 
 trait Sluggable
 {
@@ -22,7 +23,7 @@ trait Sluggable
      * @param  string  $url
      * @return  string
      */
-    private function toSlug($url)
+    private function toSlug($origUrl)
     {
         $rules = [
             '´'=>'', 'ˇ'=>'', 'ä'=>'a', 'Ä'=>'A', 'á'=>'a', 'Á'=>'A', 'à'=>'a', 'À'=>'A', 'ã'=>'a',
@@ -37,7 +38,8 @@ trait Sluggable
             'ž'=>'z', 'Ž'=>'Z', 'ź'=>'z', 'Ź'=>'Z',
         ];
 
-        $url = trim($url);
+        $url = trim($origUrl);
+        $url = Str::ascii($url);
         $url = strtr($url, $rules);
         $url = mb_strtolower($url, 'utf8');
         $url = preg_replace('/[^\-a-z0-9]+/', '-', $url);
