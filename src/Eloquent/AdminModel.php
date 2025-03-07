@@ -20,8 +20,6 @@ use Admin\Core\Eloquent\Concerns\RelationsMapBuilder;
 use Admin\Core\Eloquent\Concerns\Sluggable;
 use Admin\Core\Eloquent\Concerns\Uploadable;
 use Admin\Core\Eloquent\Concerns\Validation;
-use Admin\Core\Helpers\File;
-use Carbon\Carbon;
 use Fields;
 use Illuminate\Database\Eloquent\Model;
 use Schema;
