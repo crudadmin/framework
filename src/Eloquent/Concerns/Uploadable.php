@@ -101,6 +101,10 @@ trait Uploadable
      */
     public function upload(string $fieldKey, $fileOrPath, $options = [])
     {
+        $options = array_merge([
+            'postfix' => config('admin.uploads_postfix', false),
+        ], $options);
+
         $uploader = new AdminUploader($this, $fieldKey, $fileOrPath, $options);
 
         if ( !($path = $uploader->upload()) ) {
