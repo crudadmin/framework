@@ -21,7 +21,12 @@ trait RelationsMapBuilder
 
     protected function bootRelationships()
     {
-        $tree = $this->getCachedRelationsTree();
+        // Support masking relations from original model
+        if ( $this instanceof \Admin\Eloquent\AdminView ){
+            $tree = AdminCore::getModelByTable($this->getTable())->getCachedRelationsTree();
+        } else {
+            $tree = $this->getCachedRelationsTree();
+        }
 
         foreach ($tree as $key => $callback) {
             $this->resolveRelationUsing($key, function($model) use ($callback) {
