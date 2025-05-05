@@ -113,7 +113,7 @@ class AdminCore
         //Search specific order
         foreach ($models as $model) {
             //Return cloned booted class instance
-            if ($model->getTable() == $tableName) {
+            if ($model->getAdminTable() == $tableName) {
                 return $model->newInstance();
             }
         }
@@ -372,7 +372,7 @@ class AdminCore
                     continue;
                 }
 
-                $error = 'In '.__CLASS__.' line '.__LINE__.': Model name '.$model->getTable().' has migration date '.$model->getMigrationDate().' wich already exists in other model '.$this->get('models', [])[$model->getMigrationDate()]->getTable().'.';
+                $error = 'In '.__CLASS__.' line '.__LINE__.': Model name '.$model->getAdminTable().' has migration date '.$model->getMigrationDate().' wich already exists in other model '.$this->get('models', [])[$model->getMigrationDate()]->getAdminTable().'.';
 
                 Log::error($error);
                 abort(500, $error);

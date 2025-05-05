@@ -20,6 +20,7 @@ use Admin\Core\Eloquent\Concerns\RelationsMapBuilder;
 use Admin\Core\Eloquent\Concerns\Sluggable;
 use Admin\Core\Eloquent\Concerns\Uploadable;
 use Admin\Core\Eloquent\Concerns\Validation;
+use Illuminate\Support\Str;
 use Fields;
 use Illuminate\Database\Eloquent\Model;
 use Schema;
@@ -157,6 +158,16 @@ class AdminModel extends Model
         }
 
         parent::__construct($attributes);
+    }
+
+    /**
+     * Admin table name (we ignore real database table name)
+     *
+     * @return void
+     */
+    public function getAdminTable()
+    {
+        return Str::snake(Str::pluralStudly(class_basename($this)));
     }
 
     /**
