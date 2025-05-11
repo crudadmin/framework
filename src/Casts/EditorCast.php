@@ -19,7 +19,7 @@ class EditorCast implements CastsAttributes, AdminCast
     public function get($model, $key, $value, $attributes)
     {
         if ( \Admin::isFrontend() ) {
-            $attributes = [];
+            $attributes = '';
 
             if ( \FrontendEditor::isActive() && admin() && admin()->hasAccess($model, 'update') ) {
                 $hash = \FrontendEditor::makeHash($model->getTable(), $key, $model->getKey());
