@@ -240,30 +240,6 @@ class AdminModel extends Model
      */
     public function getValue($key, $force = true)
     {
-        // If is called field existing field
-        // TODO: refactor gutenberg
-        // if (($field = $this->getField($key))) {
-            // if ( in_array($field['type'], ['editor', 'longeditor']) ) {
-            //     $value = $this->getParentValue($key);
-
-            //     if ($this->hasFieldParam($key, ['locale'], true)) {
-            //         $value = $this->getLocaleValue($value);
-            //     }
-
-            //     if ( $value && class_exists('Admin') && \Admin::isFrontend() ) {
-            //         if ( \FrontendEditor::isActive() && admin()->hasAccess($this, 'update') ) {
-            //             $hash = \FrontendEditor::makeHash($this->getTable(), $key, $this->getKey());
-
-            //             $attributes = 'data-model="'.$this->getTable().'" data-key="'.$key.'" data-id="'.$this->getKey().'" data-hash="'.$hash.'"';
-            //         }
-
-            //         return '<div data-crudadmin-editor'.(isset($attributes) ? (' '.$attributes) : '').'>'.$value.'</div>';
-            //     }
-
-            //     return $value;
-            // }
-        // }
-
         return self::__get($key);
     }
 

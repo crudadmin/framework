@@ -2,13 +2,14 @@
 
 namespace Admin\Core\Eloquent\Concerns;
 
-use Admin\Core\Casts\AdminFileCast;
-use Admin\Core\Casts\AdminMultiCast;
+use Admin\Core\Casts\EditorCast;
 use Admin\Core\Casts\DateableCast;
 use Admin\Core\Casts\GeometryCast;
+use Admin\Core\Casts\AdminFileCast;
 use Admin\Core\Casts\GutenbergCast;
-use Admin\Core\Casts\LocalizedJsonCast;
+use Admin\Core\Casts\AdminMultiCast;
 use Admin\Core\Casts\MultipleJsonCast;
+use Admin\Core\Casts\LocalizedJsonCast;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Contracts\Database\Eloquent\CastsInboundAttributes;
 
@@ -253,6 +254,8 @@ trait HasAdminCasts
                 $this->addMultiCast($key, AdminFileCast::class);
             } else if ( $this->isFieldType($key, ['time', 'date', 'datetime', 'timestamp']) ) {
                 $this->addMultiCast($key, DateableCast::class);
+            } else if ( $this->isFieldType($key, ['editor', 'longeditor']) ) {
+                $this->addMultiCast($key, EditorCast::class);
             }
 
             //Add cast attribute for fields with multiple select
