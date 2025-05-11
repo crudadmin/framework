@@ -39,7 +39,8 @@ class ImageCompressor
 
         //Compress with linux commands if available
         try {
-            $origSize = $this->getFilesize($sourcePath);
+            //TODO: compare?
+            // $origSize = $this->getFilesize($sourcePath);
 
             $optimizerChain = CustomImageOptimizerChainFactory::create();
             $optimizerChain->optimize($sourcePath, $destinationPath);

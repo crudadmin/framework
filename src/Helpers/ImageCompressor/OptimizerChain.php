@@ -8,6 +8,11 @@ use Spatie\ImageOptimizer\OptimizerChain as BaseOptimizerChain;
 
 class OptimizerChain extends BaseOptimizerChain
 {
+    public function __construct()
+    {
+        $this->useLogger(new Logger());
+    }
+
     public function optimize(string $pathToImage, ?string $pathToOutput = null)
     {
         if ($pathToOutput && $pathToImage != $pathToOutput) {
