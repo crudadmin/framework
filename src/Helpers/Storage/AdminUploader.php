@@ -296,7 +296,7 @@ class AdminUploader
     {
         //Url address
         if ( $type == 'url' ) {
-            return filter_var($fileOrData, FILTER_VALIDATE_URL) ? true : false;
+            return filter_var($fileOrData, FILTER_VALIDATE_URL) || file_exists($fileOrData) ? true : false;
         }
 
         //Uploader request
