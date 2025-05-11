@@ -27,7 +27,7 @@ class EditorCast implements CastsAttributes, AdminCast
                 $attributes = 'data-model="'.$model->getTable().'" data-key="'.$key.'" data-id="'.$model->getKey().'" data-hash="'.$hash.'"';
             }
 
-            return '<div data-crudadmin-editor'.(isset($attributes) ? (' '.$attributes) : '').'>'.$value.'</div>';
+            return '<div data-crudadmin-editor'.$attributes.'>'.$value.'</div>';
         }
 
         return $value;
