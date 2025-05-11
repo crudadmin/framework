@@ -55,16 +55,19 @@ class ImageUploadMutator extends UploadMutator
      */
     private function resizeMaxResolution($image)
     {
-        $imageMaximumProportions = $this->model->getProperty('imageMaximumProportions');
+        $hasModelMaximumSizes = $this->model->getProperty('imageMaximumProportions');
 
         //Check if images can be automatically resized
-        if (! ($can_resize = config('admin.image_auto_resize', true))) {
+        if (
+            $hasModelMaximumSizes === false
+            || config('admin.image_auto_resize', true) === false
+        ) {
             return $image;
         }
 
         //Max dimensions
-        $maxWidth = config('admin.image_max_width', 1920);
-        $maxHeight = config('admin.image_max_height', 1200);
+        $maxWidth = config('admin.image_max_width', 3840);
+        $maxHeight = config('admin.image_max_height', 2160);
 
         $aspectRatio = function ($constraint) {
             $constraint->aspectRatio();
