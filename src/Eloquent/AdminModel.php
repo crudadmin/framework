@@ -167,7 +167,12 @@ class AdminModel extends Model
      */
     public function getAdminTable()
     {
-        return Str::snake(Str::pluralStudly(class_basename($this)));
+        // Support for AdminViews
+        if ( $this instanceof \Admin\Eloquent\AdminView ) {
+            return Str::snake(Str::pluralStudly(class_basename($this)));
+        }
+
+        return parent::getTable();
     }
 
     /**
