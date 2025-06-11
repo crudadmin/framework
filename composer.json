@@ -2,11 +2,21 @@
     "name": "crudadmin/framework",
     "type": "library",
     "description": "Package creating support for Admin Model migrations feature",
-    "keywords": ["crudadmin", "admin-model", "model", "admin", "eloquent", "laravel"],
+    "keywords": [
+        "crudadmin",
+        "admin-model",
+        "model",
+        "admin",
+        "eloquent",
+        "laravel"
+    ],
     "homepage": "https://crudadmin.com",
     "license": "MIT",
     "authors": [
-        { "name": "Marek Gogoľ", "email": "info@marekgogol.sk" }
+        {
+            "name": "Marek Gogoľ",
+            "email": "info@marekgogol.sk"
+        }
     ],
     "require": {
         "php": ">=8.0",

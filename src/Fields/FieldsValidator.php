@@ -391,6 +391,21 @@ class FieldsValidator
     }
 
     /**
+     * Takes all validated data and fills them into the the model
+     *
+     * @param  mixed $data
+     * @return void
+     */
+    public function fill($data = [])
+    {
+        $data = array_merge($this->getData(), $data);
+
+        $this->model->fill($data);
+
+        return $this->model;
+    }
+
+    /**
      * Returns first level query parameters keys
      * from variant.xy.tralalla makes variant
      *
