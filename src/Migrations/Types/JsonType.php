@@ -19,7 +19,7 @@ class JsonType extends Type
      */
     public function isEnabled(AdminModel $model, string $key)
     {
-        return $model->isFieldType($key, ['json']) || $model->hasFieldParam($key, ['locale', 'multiple']);
+        return $model->isFieldType($key, ['json', 'array']) || $model->hasFieldParam($key, ['locale', 'multiple']);
     }
 
     /**

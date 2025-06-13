@@ -14,7 +14,7 @@ DummyParameters
     /*
      * Automatic form and database generator by fields list (prettier-ignore)
      * :name - field name
-     * :type - field type (string/text/editor/select/integer/decimal/file/password/date/datetime/time/checkbox/radio)
+     * :type - field type (string/text/longtext/editor/select/integer/decimal/file/password/date/datetime/time/timestamp/checkbox/radio/json/geometry)
      * ... other validation methods from laravel
      */
     public function fields()
