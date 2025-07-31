@@ -156,6 +156,13 @@ trait Validation
             }
         }
 
+        // Add foreign keys to validation rules
+        foreach ($this->getForeignColumn() as $table => $column) {
+            if ( ! isset($data[$column]) ) {
+                $data[$column] = ['integer', 'nullable'];
+            }
+        }
+
         return $data;
     }
 
