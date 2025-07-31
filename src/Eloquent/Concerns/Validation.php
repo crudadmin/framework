@@ -281,7 +281,7 @@ trait Validation
 
     public function scopeValidator($query, $request = null)
     {
-        $validator = new FieldsValidator($this, request());
+        $validator = new FieldsValidator($this, $request ?: request());
 
         return $validator;
     }
