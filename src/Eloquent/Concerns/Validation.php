@@ -87,6 +87,13 @@ trait Validation
 
         $data = [];
 
+        // Add foreign keys to validation rules
+        foreach ($this->getForeignColumn() ?: [] as $table => $column) {
+            if ( ! isset($data[$column]) ) {
+                $data[$column] = ['integer', 'nullable'];
+            }
+        }
+
         if ( method_exists($this, 'getDefaultLanguage') ) {
             $defaultLanguage = $this->getDefaultLanguage() ?: Localization::getDefaultLanguage();
         } else {
@@ -153,13 +160,6 @@ trait Validation
                         $data[$field_key] = $langRules;
                     }
                 }
-            }
-        }
-
-        // Add foreign keys to validation rules
-        foreach ($this->getForeignColumn() as $table => $column) {
-            if ( ! isset($data[$column]) ) {
-                $data[$column] = ['integer', 'nullable'];
             }
         }
 
