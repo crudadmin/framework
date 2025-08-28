@@ -39,6 +39,18 @@ class AdminModelRequest
     {
         return [];
     }
+
+    /**
+     * Replace existing validation rules with attached ones
+     *
+     * @example [ 'field' => 'name:email' ]
+     *
+     * @return  array
+     */
+    public function replace()
+    {
+        return [];
+    }
 }
 
 ?>
