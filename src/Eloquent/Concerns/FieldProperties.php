@@ -39,7 +39,6 @@ trait FieldProperties
      */
     protected $skipBelongsToMany = false;
 
-
     /**
      * Fields cache key
      *
@@ -296,7 +295,12 @@ trait FieldProperties
     {
         //We want all fields options
         if ($set === true) {
-            $this->withOptions = ['*'];
+            $this->withOptions = [
+                '*' => [
+                    'limit' => 10000,
+                    'query' => null,
+                ]
+            ];
         }
 
         //We want specifics fields options
@@ -312,7 +316,7 @@ trait FieldProperties
      *
      * @return array
      */
-    public function getAllowedOptions()
+    public function getOptionsSettings()
     {
         return $this->withOptions;
     }
