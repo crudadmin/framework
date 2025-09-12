@@ -297,8 +297,7 @@ trait FieldProperties
         if ($set === true) {
             $this->withOptions = [
                 '*' => [
-                    'limit' => 10000,
-                    'query' => null,
+                    // Settings
                 ]
             ];
         }
