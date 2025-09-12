@@ -291,11 +291,41 @@ trait FieldProperties
      * @param  bool|array  $set
      * @return $this
      */
+    public function withAsyncOptions(array $rows = [])
+    {
+        $options = $this->getOptionsSettings();
+        $fields = $this->getFields();
+
+        foreach ($fields as $key => $field) {
+            if (($field['async'] ?? false)) {
+                $ids = [];
+
+                foreach ($rows as $row) {
+                    $ids[] = $row[$key] ?? null;
+                }
+
+                $options[$key] = [
+                    ...$options[$key] ?? [],
+                    'ids' => array_filter($ids),
+                ];
+            }
+        }
+
+        return $this->withOptions($options);
+    }
+
+    /**
+     * Allow options.
+     *
+     * @param  bool|array  $set
+     * @return $this
+     */
     public function withOptions($set = null)
     {
         //We want all fields options
         if ($set === true) {
             $this->withOptions = [
+                ...$this->withOptions ?: [],
                 '*' => [
                     // Settings
                 ]
