@@ -47,7 +47,10 @@ trait HasUploadableFilenames
             $filename = $pathinfo['filename'] ?? null;
 
             if ( $pathinfo['extension'] ?? null ){
-                $this->extension = $pathinfo['extension'];
+                $extension = $pathinfo['extension'];
+                $extension = explode('?', $extension)[0];
+
+                $this->extension = $extension;
             }
         }
 

@@ -130,7 +130,7 @@ class AdminUploader
         //Copy file from server, or directory into uploads for field
         $this->getLocalUploadsStorage()->put($destinationPath, $fileData);
 
-        //If file is url adress, we want verify extension type
+        //If file is url adress, we want verify extension type due to some malicious files
         if ( $isUrl && !file_exists($file) ) {
             $gussedExtension = $this->guessExtensionFromRemoteFile($destinationPath);
 
@@ -160,6 +160,7 @@ class AdminUploader
             'image/png' => 'png',
             'image/gif' => 'gif',
             'image/bmp' => 'bmp',
+            'image/webp' => 'webp',
             'application/x-zip' => 'zip',
             'application/x-rar' => 'rar',
             'text/css' => 'css',
