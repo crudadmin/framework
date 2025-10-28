@@ -22,7 +22,7 @@ trait HasAdminCasts
      */
     private static $withMultiCast = false;
 
-    private function temporaryCastType($key, $type, $cache, $callback)
+    public function temporaryCastType($key, $type, $cache, $callback)
     {
         $originalCast = $this->casts[$key] ?? null;
 
@@ -37,6 +37,19 @@ trait HasAdminCasts
         $this->casts[$key] = $originalCast;
 
         return $value;
+    }
+
+    /**
+     * Returns uncached attribute value.
+     *
+     * @param  mixed $key
+     * @return void
+     */
+    public function castAttributeUncached($key)
+    {
+        return $this->temporaryCastType($key, $this->casts[$key], false, function() use ($key) {
+            return $this->castAttribute($key, $this->attributes[$key]);
+        });
     }
 
     /**
