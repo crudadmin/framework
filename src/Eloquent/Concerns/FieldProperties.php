@@ -304,10 +304,14 @@ trait FieldProperties
                     $ids[] = $row[$key] ?? null;
                 }
 
-                $options[$key] = [
-                    ...$options[$key] ?? [],
-                    'ids' => array_filter($ids),
-                ];
+                $ids = array_filter($ids);
+
+                if ( count($ids) > 0 ) {
+                    $options[$key] = [
+                        ...$options[$key] ?? [],
+                        'ids' => $ids,
+                    ];
+                }
             }
         }
 
