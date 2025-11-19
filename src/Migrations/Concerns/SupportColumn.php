@@ -147,15 +147,18 @@ trait SupportColumn
      */
     private function setIndex($table, AdminModel $model, string $key, $column, $columnClass)
     {
-        if (! $model->hasFieldParam($key, 'index')) {
+        $isIndex = $model->hasFieldParam($key, 'index');
+        $isUniqueIndex = $model->hasFieldParam($key, 'unique_index');
+
+        if (! $isIndex && !$isUniqueIndex) {
             return;
         }
 
-        $type = $columnClass->getIndexType();
+        $type = $isUniqueIndex ? 'unique' : $columnClass->getIndexType();
         $postfix = strtolower($type);
         $field = $model->getField($key);
 
-        $indexes = collect(array_wrap($field['index']))->map(function($index){
+        $indexes = collect(array_wrap($field['index'] ?? $field['unique_index']))->map(function($index){
             return is_string($index) ? explode(',', $index) : [];
         });
 

@@ -12,8 +12,8 @@ trait HasAttributes
      * @var array
      */
     protected $attributes = [
-         'name', 'type', 'resize', 'locale', 'default', 'unique_db', 'decimal_length',
-         'index', 'unsigned', 'null', 'imaginary', 'migrateToPivot', 'fulltext',
+         'name', 'type', 'resize', 'locale', 'default', 'decimal_length',
+         'index', 'unsigned', 'unique_index', 'null', 'imaginary', 'migrateToPivot', 'fulltext',
     ];
 
     /**
