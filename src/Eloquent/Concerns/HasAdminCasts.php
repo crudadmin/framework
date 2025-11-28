@@ -10,8 +10,6 @@ use Admin\Core\Casts\GutenbergCast;
 use Admin\Core\Casts\AdminMultiCast;
 use Admin\Core\Casts\MultipleJsonCast;
 use Admin\Core\Casts\LocalizedJsonCast;
-use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Contracts\Database\Eloquent\CastsInboundAttributes;
 
 trait HasAdminCasts
 {
