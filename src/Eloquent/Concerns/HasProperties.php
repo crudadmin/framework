@@ -17,7 +17,7 @@ trait HasProperties
      * @var  array
      */
     static $callableProperties = [
-        'name', 'group', 'fields', 'active', 'inMenu', 'single', 'options',
+        'name', 'group', 'fields', 'active', 'inMenu', 'single', 'options', 'searches',
         'insertable', 'editable', 'publishable', 'deletable', 'rules',
         'settings', 'buttons', 'reserved', 'layouts', 'belongsToModel'
     ];
