@@ -3,11 +3,9 @@
 namespace Admin\Core\Eloquent\Concerns;
 
 use AdminCore;
-use Admin\Core\Eloquent\AdminModel;
 use Admin\Core\Fields\Group;
 use Admin\Helpers\Localization\AdminResourcesSyncer;
 use Fields;
-use Localization;
 
 trait FieldProperties
 {
