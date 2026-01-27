@@ -74,7 +74,7 @@ trait SupportRelations
             }
 
             $this->registerAfterAllMigrations($model, function ($table) use ($model, $foreignColumn, $parent) {
-                $foreignName = $this->makeShortForeignIndex($model->getTable(), $foreignColumn, 'fkbm_');
+                $foreignName = $this->getIndexName($model->getTable(), $foreignColumn);
 
                 $table->foreign($foreignColumn, $foreignName)->references('id')->on($parent->getTable());
             });

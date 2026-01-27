@@ -2,20 +2,24 @@
 
 namespace Admin\Core\Migrations\Concerns;
 
-use Illuminate\Support\Facades\DB;
 use Admin\Core\Eloquent\AdminModel;
+use Str;
 
 trait HasIndex
 {
     /**
      * Returns foreign key name.
-     * @param  AdminModel $model
-     * @param  string     $key
-     * @param  string     $prefix
+     * @param  mixed    $modelOrTable
+     * @param  string   $key
+     * @param  string   $postfix
+     * @param  string   $prefix
+     *
      * @return string
      */
-    protected function getIndexName(AdminModel $model, $key, $prefix = null)
+    protected function getIndexName($modelOrTable, $key, $postfix = null, $prefix = null)
     {
+        $table = $modelOrTable instanceof AdminModel ? $modelOrTable->getTable() : $modelOrTable;
+
         $key = array_wrap($key);
 
         if ( count($key) >= 2 ){
@@ -25,23 +29,25 @@ trait HasIndex
         }
 
         $key = implode('_', $key);
+        $prefix = is_null($prefix) ? '' : $prefix;
+        $postfix = is_null($postfix) ? 'foreign' : $postfix;
 
-        return $model->getTable().'_'.$key.'_'.($prefix ?: 'foreign');
+        return $this->makeShortForeignIndex($table, $key, $prefix, $postfix);
     }
 
     /**
      * Returns if table has index builded from column name and table name.
      * @param  AdminModel $model
      * @param  string|array     $key
+     * @param  string     $postfix
      * @param  string     $prefix
-     * @param  string     $indexKey
      * @return int
      */
-    protected function hasIndex(AdminModel $model, $key, $prefix = null)
+    protected function hasIndex(AdminModel $model, $key, $postfix = null, $prefix = null)
     {
         $indexes = $this->getModelIndexes($model);
 
-        $searchIndex = $this->getIndexName($model, $key, $prefix);
+        $searchIndex = $this->getIndexName($model, $key, $postfix, $prefix);
 
         return array_key_exists($searchIndex, $indexes);
     }
@@ -76,12 +82,12 @@ trait HasIndex
     /*
      * Drops foreign key in table
      */
-    protected function dropIndex($model, $key, $prefix = null)
+    protected function dropIndex($model, $key, $postfix = null)
     {
         $connection = $model->getConnection();
 
         $expression = dbRaw(
-            'alter table `'.$model->getTable().'` drop '.($prefix ?: 'foreign key').' `'.$this->getIndexName($model, $key, $prefix).'`',
+            'alter table `'.$model->getTable().'` drop '.($postfix ?: 'foreign key').' `'.$this->getIndexName($model, $key, $postfix).'`',
             $connection
         );
 
@@ -91,12 +97,12 @@ trait HasIndex
     /*
      * Drops foreign key in table
      */
-    protected function addIndex($model, $key, $prefix = null)
+    protected function addIndex($model, $key, $postfix = null)
     {
         $connection = $model->getConnection();
 
         $expression = dbRaw(
-            'alter table `'.$model->getTable().'` add INDEX '.$this->getIndexName($model, $key, $prefix).' (`'.$key.'`)',
+            'alter table `'.$model->getTable().'` add INDEX '.$this->getIndexName($model, $key, $postfix).' (`'.$key.'`)',
             $connection
         );
 
@@ -140,13 +146,18 @@ trait HasIndex
      * Create foreign key index name.
      * @param  string $table
      * @param  string $key
+     * @param  string $prefix
+     * @param  string $postfix
+     *
      * @return string
      */
-    protected function makeShortForeignIndex($table, $key, $prefix = 'fk_', $postfix = '')
+    protected function makeShortForeignIndex($table, $key, $prefix = '', $postfix = '')
     {
         $fkStringLimit = 64;
 
         $table = preg_replace('/_+/', '_', $table);
+        $prefix = $prefix ? Str::rtrim($prefix, '_').'_' : '';
+        $postfix = $postfix ? '_'.Str::trim($postfix, '_') : '';
 
         //If table name is too long for MySql
         for ( $i = 0; $i < 2; $i++ )

@@ -65,7 +65,8 @@ class BelongsToType extends Type
 
             $this->registerAfterAllMigrations($model, function ($table) use ($key, $properties, $model, $parent) {
                 if ($parent->getSchema()->hasTable($parent->getTable())) {
-                    $table->foreign($key)->references($properties[2])->on($properties[0]);
+                    $table->foreign($key, $this->getIndexName($model, $key))
+                          ->references($properties[2])->on($properties[0]);
                 }
             });
         }

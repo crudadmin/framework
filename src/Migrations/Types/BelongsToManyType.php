@@ -95,11 +95,11 @@ class BelongsToManyType extends Type
 
         //Add integer reference for owner table
         $table->integer($properties[6])->unsigned();
-        $table->foreign($properties[6], $this->makeShortForeignIndex($properties[3], $properties[6]))->references($model->getKeyName())->on($model->getTable());
+        $table->foreign($properties[6], $this->getIndexName($properties[3], $properties[6]))->references($model->getKeyName())->on($model->getTable());
 
         //Add integer reference for belongs to table
         $table->integer($properties[7])->unsigned();
-        $table->foreign($properties[7], $this->makeShortForeignIndex($properties[3], $properties[7]))->references($properties[2])->on($properties[0]);
+        $table->foreign($properties[7], $this->getIndexName($properties[3], $properties[7]))->references($properties[2])->on($properties[0]);
     }
 
     /**
