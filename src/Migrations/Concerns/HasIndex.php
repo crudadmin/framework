@@ -102,4 +102,64 @@ trait HasIndex
 
         return $connection->select($expression);
     }
+
+    /**
+     * Remove every second char from given string
+     *
+     * @param  string  $string
+     * @return string
+     */
+    private function removeEverySecondCharInMiddle($string)
+    {
+        $string = str_replace('_', '', $string);
+
+        //Split string into array
+        $allChars = str_split($string);
+
+        //Skip first and last characted in the string
+        $chars = array_slice($allChars, 1, -1);
+
+        //Remove every other characted from the middle string
+        foreach ($chars as $key => $char) {
+            if ( $key%2 == 0 ) {
+                unset($chars[$key]);
+            }
+        }
+
+        //Does not delete first and last character from the table.
+        //Everything odd characted in the middle can be removed
+        $newString = $allChars[0].implode('', $chars).$allChars[strlen($string)-1];
+
+        //Return smaller character
+        return strlen($newString) < strlen($string)
+                ? $newString
+                : $string;
+    }
+
+    /**
+     * Create foreign key index name.
+     * @param  string $table
+     * @param  string $key
+     * @return string
+     */
+    protected function makeShortForeignIndex($table, $key, $prefix = 'fk_', $postfix = '')
+    {
+        $fkStringLimit = 64;
+
+        $table = preg_replace('/_+/', '_', $table);
+
+        //If table name is too long for MySql
+        for ( $i = 0; $i < 2; $i++ )
+        {
+            $totalLength = strlen($prefix) + strlen($table) + 1 + strlen($key) + strlen($postfix);
+
+            if ( strlen($table) > 10 && $totalLength > $fkStringLimit ) {
+                $table = $this->removeEverySecondCharInMiddle($table);
+            } else {
+                break;
+            }
+        }
+
+        return $prefix.$table.'_'.$key.$postfix;
+    }
 }
