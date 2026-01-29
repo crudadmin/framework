@@ -4,6 +4,7 @@ namespace Admin\Core\Casts;
 
 use Admin\Core\Casts\Concerns\MultiCast;
 use Illuminate\Contracts\Database\Eloquent\Castable;
+use Illuminate\Support\Str;
 
 class MultipleJsonCast implements Castable
 {
@@ -14,7 +15,13 @@ class MultipleJsonCast implements Castable
             public function get($model, $key, $value, $attributes)
             {
                 return collect(json_decode($value, true))->map(function($item) use ($model, $key, $attributes) {
-                    return parent::get($model, $key, $item, $attributes);
+                    $value = parent::get($model, $key, $item, $attributes);
+
+                    if ( $model->hasGetMutator($key) ) {
+                        return $model->{'get'.Str::studly($key).'Attribute'}($value);
+                    }
+
+                    return $value;
                 });
             }
 
