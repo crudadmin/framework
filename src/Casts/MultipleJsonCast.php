@@ -14,15 +14,15 @@ class MultipleJsonCast implements Castable
         {
             public function get($model, $key, $value, $attributes)
             {
-                return collect(json_decode($value, true))->map(function($item) use ($model, $key, $attributes) {
-                    $value = parent::get($model, $key, $item, $attributes);
-
-                    if ( $model->hasGetMutator($key) ) {
-                        return $model->{'get'.Str::studly($key).'Attribute'}($value);
-                    }
-
-                    return $value;
+                $array = collect(json_decode($value, true))->map(function($item) use ($model, $key, $attributes) {
+                    return parent::get($model, $key, $item, $attributes);
                 });
+
+                if ( $model->hasGetMutator($key) ) {
+                    return $model->{'get'.Str::studly($key).'Attribute'}($array);
+                }
+
+                return $array;
             }
 
             //1. We need create clone of received array. We cannot override $value keys.
