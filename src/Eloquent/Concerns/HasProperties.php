@@ -19,7 +19,7 @@ trait HasProperties
     static $callableProperties = [
         'name', 'group', 'fields', 'active', 'inMenu', 'single', 'options', 'searches',
         'insertable', 'editable', 'publishable', 'deletable', 'rules',
-        'settings', 'buttons', 'reserved', 'layouts', 'belongsToModel'
+        'settings', 'buttons', 'exports', 'reserved', 'layouts', 'belongsToModel'
     ];
 
     /**
