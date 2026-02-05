@@ -452,6 +452,11 @@ trait Sluggable
 
         $newSlug = $history_row->getSlug();
 
+        // Dont redirect if new slug is the same as the old slug
+        if ( $newSlug == $slug ) {
+            return;
+        }
+
         throw new SluggableException($this->buildFailedSlugResponse($newSlug, $slug, $id, $key));
     }
 
