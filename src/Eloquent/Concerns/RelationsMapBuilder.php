@@ -138,6 +138,7 @@ trait RelationsMapBuilder
      * Build fields tree for all admin models
      * Rebuilds it when model list changes
      * This prevents infinite loop when model is other models which boots previous model
+     * It's important to not call ->getFields() from that models. Because recursive loop may happen.
      *
      * @return void
      */
@@ -311,7 +312,7 @@ trait RelationsMapBuilder
 
         foreach ($this->getFields() as $fieldKey => $field) {
             if ( isset($field['belongsTo']) ){
-                $properties = $this->getRelationProperty($fieldKey, 'belongsTo');
+                $properties = $this->getRelationPropertyData($field, $fieldKey, 'belongsTo');
 
 
                 $relation = function($model) use ($properties, $field) {
@@ -385,7 +386,7 @@ trait RelationsMapBuilder
 
             foreach ($fields as $fieldKey => $field) {
                 if ( isset($field['belongsToMany']) ) {
-                    $properties = $relationModel->getRelationProperty($fieldKey, 'belongsToMany');
+                    $properties = $relationModel->getRelationPropertyData($field, $fieldKey, 'belongsToMany');
 
                     if ( $properties[0] == $this->getTable() ) {
                         $relation = function($model) use ($relationModel, $properties) {
@@ -411,7 +412,7 @@ trait RelationsMapBuilder
         //Own fields has priority between parent
         foreach ($this->getFields() as $fieldKey => $field) {
             if ( isset($field['belongsToMany']) ){
-                $properties = $this->getRelationProperty($fieldKey, 'belongsToMany');
+                $properties = $this->getRelationPropertyData($field, $fieldKey, 'belongsToMany');
 
                 $fieldRelationModel = AdminCore::getModelByTable($properties[0]);
 
