@@ -11,6 +11,11 @@ trait RelationsMapBuilder
 {
     private static $bootingRelations = [];
 
+    private static $relationFieldsTree = [
+        'key' => null,
+        'models' => [],
+    ];
+
     /*
      * Relations cache turned off for now
      */
@@ -129,18 +134,33 @@ trait RelationsMapBuilder
         return $tree;
     }
 
+    /**
+     * Build fields tree for all admin models
+     * Rebuilds it when model list changes
+     * This prevents infinite loop when model is other models which boots previous model
+     *
+     * @return void
+     */
     private function getAdminFieldsTree()
     {
-        $tree = [];
+        $models = AdminCore::getAdminModels();
+        $cacheKey = implode(';', array_keys($models));
 
-        foreach (AdminCore::getAdminModels() as $model) {
-            $tree[$model->getTable()] = [
+        // Return cached tree if it exists
+        if ( static::$relationFieldsTree['key'] === $cacheKey ) {
+            return static::$relationFieldsTree['models'];
+        }
+
+        static::$relationFieldsTree['key'] = $cacheKey;
+
+        foreach ($models as $model) {
+            static::$relationFieldsTree['models'][$model->getTable()] = [
                 'model' => $model,
                 'fields' => $model->getFields(),
             ];
         }
 
-        return $tree;
+        return static::$relationFieldsTree['models'];
     }
 
     private function serializeRelationsForCache($tree)
@@ -326,7 +346,7 @@ trait RelationsMapBuilder
 
             foreach ($fields as $fieldKey => $field) {
                 if ( isset($field['belongsTo']) ) {
-                    $properties = $relationModel->getRelationProperty($fieldKey, 'belongsTo');
+                    $properties = $relationModel->getRelationPropertyData($field, $fieldKey, 'belongsTo');
 
                     if ( $properties[0] == $this->getTable() ) {
                         $relation = function($model) use ($relationModel, $fieldKey) {
