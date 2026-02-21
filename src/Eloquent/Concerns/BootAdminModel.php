@@ -7,7 +7,7 @@ trait BootAdminModel
     /*
      * Closures with properties setters
      */
-    protected $adminCachable = [];
+    private $adminCachable = [];
 
     /*
      * Which admin properties should be cachced through all admin models
