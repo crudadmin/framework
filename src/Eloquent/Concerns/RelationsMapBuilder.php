@@ -74,7 +74,7 @@ trait RelationsMapBuilder
 
     public function getCachedRelationsTree()
     {
-        //TODO:
+        //TODO cache in the future:
         if ( $this->hasRelationsCache() ) {
             $cacheKey = 'relations.'.$this->getFieldsCacheModelKey();
 
@@ -102,10 +102,12 @@ trait RelationsMapBuilder
 
         $tree = [];
 
+        $adminFieldsTree = $this->getAdminFieldsTree();
+
         foreach ([
-            $this->getChildrenModelsRelations(),
-            $this->getBelongsToFieldRelations(),
-            $this->getBelongsManyToFieldRelations(),
+            $this->getChildrenModelsRelations($adminFieldsTree),
+            $this->getBelongsToFieldRelations($adminFieldsTree),
+            $this->getBelongsManyToFieldRelations($adminFieldsTree),
         ] as $modelTree) {
             $modelTree = $this->serializeRelationsForCache($modelTree);
 
@@ -123,6 +125,20 @@ trait RelationsMapBuilder
         ksort($tree);
 
         static::$bootingRelations[static::class] = false;
+
+        return $tree;
+    }
+
+    private function getAdminFieldsTree()
+    {
+        $tree = [];
+
+        foreach (AdminCore::getAdminModels() as $model) {
+            $tree[$model->getTable()] = [
+                'model' => $model,
+                'fields' => $model->getFields(),
+            ];
+        }
 
         return $tree;
     }
@@ -191,14 +207,15 @@ trait RelationsMapBuilder
     }
 
     //Todo if category call category belongsToModel
-    private function getChildrenModelsRelations()
+    private function getChildrenModelsRelations($adminFieldsTree)
     {
         $tree = [];
 
         $classBaseName = class_basename($this);
         $currentBelongsToModel = $this->getBelongsToRelation(true);
 
-        foreach (AdminCore::getAdminModels() as $relationModel) {
+        foreach ($adminFieldsTree as $item) {
+            $relationModel = $item['model'];
             $relationBaseName = class_basename($relationModel);
             $belongsToModel = $relationModel->getBelongsToRelation(true);
 
@@ -268,7 +285,7 @@ trait RelationsMapBuilder
         return $tree;
     }
 
-    private function getBelongsToFieldRelations()
+    private function getBelongsToFieldRelations($adminFieldsTree)
     {
         $tree = [];
 
@@ -302,10 +319,12 @@ trait RelationsMapBuilder
             }
         }
 
-
         //Reverse belongsTo field relation
-        foreach (AdminCore::getAdminModels() as $relationModel) {
-            foreach ($relationModel->getFields() as $fieldKey => $field) {
+        foreach ($adminFieldsTree as $item) {
+            $relationModel = $item['model'];
+            $fields = $item['fields'];
+
+            foreach ($fields as $fieldKey => $field) {
                 if ( isset($field['belongsTo']) ) {
                     $properties = $relationModel->getRelationProperty($fieldKey, 'belongsTo');
 
@@ -335,13 +354,16 @@ trait RelationsMapBuilder
         return $tree;
     }
 
-    private function getBelongsManyToFieldRelations()
+    private function getBelongsManyToFieldRelations($adminFieldsTree)
     {
         $tree = [];
 
         //Reverse belongsToMany field relation
-        foreach (AdminCore::getAdminModels() as $relationModel) {
-            foreach ($relationModel->getFields() as $fieldKey => $field) {
+        foreach ($adminFieldsTree as $item) {
+            $relationModel = $item['model'];
+            $fields = $item['fields'];
+
+            foreach ($fields as $fieldKey => $field) {
                 if ( isset($field['belongsToMany']) ) {
                     $properties = $relationModel->getRelationProperty($fieldKey, 'belongsToMany');
 
