@@ -89,6 +89,11 @@ class LocalizedJsonCast implements Castable
 
             public function set($model, $key, $value, $attributes)
             {
+                // If passed value is JSON, decode it
+                if ( $object = $this->tryDecodeStringAsJSONObject($value) ) {
+                    $value = $object;
+                }
+
                 if ( is_array($value) || $value instanceof Collection ) {
                     return collect($value)->map(function($item) use ($model, $key, $attributes) {
                         return parent::set($model, $key, $item, $attributes);
@@ -99,6 +104,31 @@ class LocalizedJsonCast implements Castable
                     return parent::set($model, $key, $value, $attributes);
                 }
             }
+
+            /**
+             * If string is received, try to decode it as JSON object
+             *
+             * @param  mixed $value
+             * @return void
+             */
+            private function tryDecodeStringAsJSONObject($value){
+                if (!is_string($value)) {
+                    return false;
+                }
+
+                // Check json format
+                if ( ($value[0] == '{' && $value[strlen($value) - 1] == '}') === false ) {
+                    return false;
+                }
+
+                $decoded = json_decode($value, true);
+
+                // If is object, return it
+                if ( json_last_error() === JSON_ERROR_NONE && is_array($decoded) ) {
+                    return $decoded;
+                }
+            }
         };
+
     }
 }
