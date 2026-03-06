@@ -3,7 +3,6 @@
 namespace Admin\Core\Migrations\Concerns;
 
 use Admin\Core\Eloquent\AdminModel;
-use Str;
 
 trait HasIndex
 {
@@ -156,8 +155,8 @@ trait HasIndex
         $fkStringLimit = 64;
 
         $table = preg_replace('/_+/', '_', $table);
-        $prefix = $prefix ? Str::rtrim($prefix, '_').'_' : '';
-        $postfix = $postfix ? '_'.Str::trim($postfix, '_') : '';
+        $prefix = $prefix ? rtrim($prefix, '_').'_' : '';
+        $postfix = $postfix ? '_'.trim($postfix, '_') : '';
 
         //If table name is too long for MySql
         for ( $i = 0; $i < 2; $i++ )
