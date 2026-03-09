@@ -139,7 +139,7 @@ trait SupportRelations
                     DB::connection($model->getConnectionName())->table($model->getTable())->update([$key => $requestedId]);
                 }
             });
-        } else {
+        } else if ( $isNullable === false ) {
             $this->getCommand()->line('<error>+ You have to insert at least one row into '.$referenceTable.' reference table or remove all existing data in actual '.$model->getTable().' table:</error>');
             die;
         }
