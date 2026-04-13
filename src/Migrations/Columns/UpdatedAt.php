@@ -16,6 +16,11 @@ class UpdatedAt extends Column
      */
     public function isEnabled(AdminModel $model)
     {
+        // Check if columns is disabled in model
+        if ( $model::UPDATED_AT === null ) {
+            return false;
+        }
+
         return $model->getProperty('timestamps');
     }
 
