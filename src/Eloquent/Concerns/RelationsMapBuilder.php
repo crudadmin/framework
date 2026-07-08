@@ -2,8 +2,9 @@
 
 namespace Admin\Core\Eloquent\Concerns;
 
-use AdminCore;
 use Admin\Core\Eloquent\AdminPivot as FrameworkAdminPivot;
+use Admin\Core\Eloquent\Concerns\AdminModelReplica;
+use AdminCore;
 use Cache;
 use Str;
 
@@ -27,7 +28,7 @@ trait RelationsMapBuilder
     protected function bootRelationships()
     {
         // Support masking relations from original model
-        if ( $this instanceof \Admin\Eloquent\AdminView ){
+        if ( $this instanceof AdminModelReplica ){
             $tree = AdminCore::getModelByTable($this->getTable())->getCachedRelationsTree();
         } else {
             $tree = $this->getCachedRelationsTree();

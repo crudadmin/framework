@@ -2,9 +2,9 @@
 
 namespace Admin\Core\Eloquent;
 
-use AdminCore;
 use Admin\Core\Casts\Concerns\AdminCast;
 use Admin\Core\Casts\Concerns\UncachableCast;
+use Admin\Core\Eloquent\Concerns\AdminModelReplica;
 use Admin\Core\Eloquent\Concerns\BootAdminModel;
 use Admin\Core\Eloquent\Concerns\FieldModules;
 use Admin\Core\Eloquent\Concerns\FieldProperties;
@@ -20,9 +20,10 @@ use Admin\Core\Eloquent\Concerns\RelationsMapBuilder;
 use Admin\Core\Eloquent\Concerns\Sluggable;
 use Admin\Core\Eloquent\Concerns\Uploadable;
 use Admin\Core\Eloquent\Concerns\Validation;
-use Illuminate\Support\Str;
+use AdminCore;
 use Fields;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Schema;
 
 class AdminModel extends Model
@@ -167,8 +168,8 @@ class AdminModel extends Model
      */
     public function getAdminTable()
     {
-        // Support for AdminViews
-        if ( $this instanceof \Admin\Eloquent\AdminView ) {
+        // Support for AdminViews and AdminModelReplica
+        if ( $this instanceof AdminModelReplica ) {
             return Str::snake(Str::pluralStudly(class_basename($this)));
         }
 
