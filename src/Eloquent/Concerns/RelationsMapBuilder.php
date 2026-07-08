@@ -156,6 +156,10 @@ trait RelationsMapBuilder
         static::$relationFieldsTree['key'] = $cacheKey;
 
         foreach ($models as $model) {
+            if ( $model instanceof AdminModelReplica ) {
+                continue;
+            }
+
             static::$relationFieldsTree['models'][$model->getTable()] = [
                 'model' => $model,
                 'fields' => $model->getFields(),
