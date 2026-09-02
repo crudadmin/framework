@@ -150,7 +150,8 @@ trait SupportColumn
         $isIndex = $model->hasFieldParam($key, 'index');
         $isUniqueIndex = $model->hasFieldParam($key, 'unique_index');
 
-        if (! $isIndex && !$isUniqueIndex) {
+        //If field is not index and not unique index and not belongs to, skip index creation
+        if (! $isIndex && !$isUniqueIndex || $model->hasFieldParam($key, ['belongsTo'])) {
             return;
         }
 
